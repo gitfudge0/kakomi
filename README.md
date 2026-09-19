@@ -10,15 +10,15 @@ If you cloned this repository, run `python build.py` first to generate the `chro
 
 ### Chrome 116+
 
-Extract `kakomi-chrome-1.2.0.zip`. Open `chrome://extensions`, turn on Developer mode, choose **Load unpacked**, and select the extracted folder containing `manifest.json`. Pin Kakomi in the extensions menu.
+Extract `kakomi-chrome-1.3.0.zip`. Open `chrome://extensions`, turn on Developer mode, choose **Load unpacked**, and select the extracted folder containing `manifest.json`. Pin Kakomi in the extensions menu.
 
 To upgrade the existing Element Shot installation while preserving preferences, replace the files in its current folder with the Chrome package contents, reload the extension, and refresh the page. If loading Kakomi as a separate extension, disable the old extension so both pickers do not run together.
 
 ### Firefox Desktop 140+
 
-For local testing, extract `kakomi-firefox-1.2.0.zip`. Open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and select its `manifest.json`. Temporary add-ons are removed when Firefox restarts.
+For local testing, extract `kakomi-firefox-1.3.0.zip`. Open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and select its `manifest.json`. Temporary add-ons are removed when Firefox restarts.
 
-The included `kakomi-firefox-1.2.0-unsigned.xpi` is an unsigned build, **not a permanently installable release**. Normal Firefox installation requires Mozilla signing. Submit the Firefox ZIP through the Mozilla Add-ons developer portal for listed or unlisted signing; distribute the signed XPI it returns. No signing keys or developer credentials are included.
+The included `kakomi-firefox-1.3.0-unsigned.xpi` is an unsigned build, **not a permanently installable release**. Normal Firefox installation requires Mozilla signing. Submit the Firefox ZIP through the Mozilla Add-ons developer portal for listed or unlisted signing; distribute the signed XPI it returns. No signing keys or developer credentials are included.
 
 ## Capture
 
@@ -30,6 +30,12 @@ The included `kakomi-firefox-1.2.0-unsigned.xpi` is an unsigned build, **not a p
 Settings: right-click the toolbar icon → **Options** in Chrome; use the extension's **Preferences** in Firefox's add-on manager. Settings are also linked from the preview. Toggle **Copy to clipboard** and **Open preview page** independently. Both can be enabled; at least one must remain on. If copying fails, the preview opens with download and copy controls.
 
 In Chrome, automatic copying on insecure HTTP pages may be blocked and fall back to the preview. Firefox uses its native image clipboard API. Captures are rectangular, limited to the visible viewport, and include overlapping page content. Offscreen elements are labeled “visible portion.” There is no scroll stitching. Iframes and closed shadow roots are captured as whole elements. Browser settings, add-on stores, built-in PDF viewers, and other restricted pages cannot be picked. Reset pinch zoom before capture; normal browser zoom is supported.
+
+## Style a screenshot
+
+Enable **Open preview page** in Settings. The preview's Appearance panel adds rounded corners, background padding, shadows, solid colors, editable gradients, and three original macOS-inspired wallpapers. Upload a local PNG, JPEG, or WebP to use your own background. Apple wallpaper files are not bundled.
+
+Preview, Copy image, and Download PNG use the same styled image. Padding and radius are measured in output pixels; the screenshot retains its original resolution. Reset restores the unmodified PNG. Edits and uploaded backgrounds last only for that open preview. Automatic copying at capture time still copies the original capture.
 
 ## Included
 
@@ -44,4 +50,4 @@ In Chrome, automatic copying on insecure HTTP pages may be blocked and fall back
 
 Run `python build.py` to regenerate both ZIPs, the unsigned Firefox XPI, the source ZIP, and SHA-256 checksums in the parent folder. No bundler or runtime dependencies are needed by the extension. Keep the Firefox add-on ID stable after first submission. The current ID is `kakomi@extensions.local`; it is an identifier, not an email contact.
 
-To run regression tests, install Playwright in your development environment and run `node tests/browser.cjs`. `PLAYWRIGHT_MODULE` can point to an existing Playwright package, `CHROME_PATH` to a Chrome executable, and `TEST_ARTIFACTS` to a scratch output directory. Tests simulate privileged browser APIs; see VERIFICATION.md for what is and is not verified.
+To run regression tests, install Playwright in your development environment and run `node tests/browser.cjs` and `node tests/editor.cjs`. `PLAYWRIGHT_MODULE` can point to an existing Playwright package, `CHROME_PATH` to a Chrome executable, and `TEST_ARTIFACTS` to a scratch output directory. Tests simulate privileged browser APIs; see VERIFICATION.md for what is and is not verified.

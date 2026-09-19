@@ -9,3 +9,5 @@ Capture destination preferences are stored locally and are not synced by Kakomi.
 Permissions: `activeTab` provides temporary page access after you invoke Kakomi; `scripting` runs the picker on that page; `storage` saves preferences and temporary previews; `clipboardWrite` copies the image. Kakomi does not request always-on access to all websites, clipboard-read access, or a downloads permission.
 
 You can disable automatic copying in Settings. Removing the extension removes its extension storage; it does not delete PNGs you downloaded or content retained by other applications.
+
+Preview styling and uploaded background images are processed locally in the preview page's memory. They are not uploaded or saved to extension storage. Copying or downloading from the preview exports the styled PNG. Closing the preview discards its edits and uploaded background. Built-in wallpapers are generated locally.

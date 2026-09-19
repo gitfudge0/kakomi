@@ -1,0 +1,13 @@
+.editor-layout{display:grid;grid-template-columns:minmax(0,1fr) 264px;gap:20px;align-items:start}
+.editor-layout:has(.editor[hidden]){grid-template-columns:minmax(0,1fr)}
+.editor{background:#151e1b;border:1px solid #ffffff19;border-radius:13px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.editor-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.editor-title h2{font-size:16px;margin:0}.editor-title button{font-size:11px;padding:6px 9px}
+.editor label{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#d3e4da;margin-top:8px}.editor output{color:#93aca0;font-variant-numeric:tabular-nums}
+.editor select{width:100%;padding:10px;background:#101716;color:#e9efed;border:1px solid #ffffff25;border-radius:7px;font:inherit;font-size:13px}
+.editor input[type=range]{width:100%;margin:0;accent-color:#b5f5d7;cursor:pointer}.editor input[type=color]{width:100%;height:34px;margin-top:8px;background:transparent;border:1px solid #ffffff25;border-radius:6px;cursor:pointer}
+.editor input[type=file]{width:100%;font-size:11px;margin-top:10px}.editor input::file-selector-button{border:0;border-radius:4px;padding:8px;margin-right:6px;background:#b5f5d7;color:#10281d}
+.editor .control-help{font-size:11px;line-height:1.6;color:#93a69c;margin-top:8px}.color-pair{display:flex;gap:12px}.color-pair label{display:block;flex:1}
+.swatches{display:flex;gap:10px;margin-top:12px}.swatches button{width:28px;height:28px;padding:0;background:var(--swatch);border-radius:50%;border:2px solid #ffffff30}.swatches button:hover{outline:2px solid #b5f5d7;outline-offset:2px}
+.preview .stage img{box-shadow:none}.preview .stage{background-color:#19201e;background-image:conic-gradient(#ffffff06 25%,transparent 0 50%,#ffffff06 0 75%,transparent 0);background-size:20px 20px}
+.primary[aria-disabled=true]{opacity:.5;cursor:wait}.editor :focus-visible{outline:2px solid #b5f5d7;outline-offset:3px}
+@media(max-width:900px){.editor-layout{grid-template-columns:minmax(0,1fr)}.editor{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}.editor-title,.editor>div,.editor>.control-help{grid-column:1/-1}.preview .stage{height:50vh}}
