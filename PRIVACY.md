@@ -10,4 +10,4 @@ Permissions: `activeTab` provides temporary page access after you invoke Kakomi;
 
 You can disable automatic copying in Settings. Removing the extension removes its extension storage; it does not delete PNGs you downloaded or content retained by other applications.
 
-Preview styling and uploaded background images are processed locally in the preview page's memory. They are not uploaded or saved to extension storage. Copying or downloading from the preview exports the styled PNG. Closing the preview discards its edits and uploaded background. Built-in wallpapers are generated locally.
+Preview styling and uploaded background images are processed locally in the preview page's memory. They are not uploaded or saved to extension storage. Copying or downloading from the preview exports the styled PNG. Closing the preview discards its edits and uploaded background.

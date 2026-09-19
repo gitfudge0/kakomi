@@ -31,3 +31,7 @@ Automated Chromium checks verify transparent rounded corners, exact padding dime
 ### Amended 1.3.0
 
 Editor regressions now cover 24 wallpaper presets, tabs, background blur, radial zoom blur, connected and independent zoom, percent padding, exact PNG download bytes, local image upload, section/global reset, and narrow layouts. Delayed render/clipboard tests verify that Copy waits for the newest frame, prevents overlapping writes, exports the current image again after subsequent edits, releases controls on failure, and sends the same bytes through the Firefox native adapter. Chrome computer-use checks exercise the controls and successful browser clipboard writes on a local fixture. Actual extension activation and live Firefox remain outside the simulated harness.
+
+### Upload-only editor amendment
+
+Removed all zoom controls and built-in wallpaper generation. The editor test verifies that Image starts without a background until an image is uploaded, then tests its rendered background and blur. Clipboard serialization, exact PNG downloads, frame styling, reset, and narrow layout checks remain in the suite.

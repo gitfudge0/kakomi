@@ -19,11 +19,10 @@ await ready();const original=await bytes();assert.equal((await pixels()).w,400);
 await page.getByRole('tab',{name:'Color',exact:true}).click();await ready();let p=await pixels();assert.equal(p.w,496);assert.equal(p.h,336);assert.deepEqual(p.corner,[213,233,223,255]);assert.deepEqual(p.edge,p.corner);
 await page.getByRole('button',{name:'Rose',exact:true}).click();await ready();assert.notDeepEqual((await pixels()).corner,p.corner);
 await page.getByRole('tab',{name:'Gradient',exact:true}).click();await ready();const before=await bytes();await slide('angle',45);assert.notDeepEqual(await bytes(),before);
-await page.getByRole('tab',{name:'Image',exact:true}).click();await ready();assert.equal(await page.locator('[data-wallpaper]').count(),24);
-for(const name of ['Coastal light','Desert dusk','Aurora','Amber ribbon']){await page.getByRole('button',{name,exact:true}).click();await ready();assert.equal((await pixels()).corner[3],255)}
-const sharp=await bytes();await slide('blur',16);assert.notDeepEqual(await bytes(),sharp);const noMotion=await bytes();await slide('zoom-blur',60);assert.notDeepEqual(await bytes(),noMotion);
-await slide('image-zoom',130);assert.equal(await page.locator('#background-zoom').inputValue(),'130');await page.locator('#connect-zooms').uncheck();await slide('background-zoom',170);assert.equal(await page.locator('#image-zoom').inputValue(),'130');
-await page.locator('[data-reset=zoom]').click();await ready();assert.equal(await page.locator('#image-zoom').inputValue(),'100');assert.equal(await page.locator('#background-zoom').inputValue(),'100');
+await page.getByRole('tab',{name:'Image',exact:true}).click();await ready();assert.equal(await page.locator('[data-wallpaper], #image-zoom, #background-zoom, #zoom-blur, #connect-zooms').count(),0);
+assert.match(await page.locator('#upload-name').textContent(),/No image uploaded/);assert.equal((await pixels()).corner[3],0);
+const uploaded=Buffer.from((await page.evaluate(()=>fixtureData)).split(',')[1],'base64');await page.locator('#wallpaper-file').setInputFiles({name:'wallpaper.png',mimeType:'image/png',buffer:uploaded});await ready();assert.equal(await page.locator('#upload-name').textContent(),'wallpaper.png');assert.equal((await pixels()).corner[3],255);
+const sharp=await bytes();await slide('blur',16);assert.notDeepEqual(await bytes(),sharp);
 await slide('shadow',67);await slide('padding',35);await slide('radius',12);
 // Copy during a deliberately slow render must wait for the current image, not the previous blob.
 await page.evaluate(()=>{globalThis.renderDelay=160;globalThis.copyDelay=250});await page.locator('#radius').fill('44');await page.locator('#copy').click();
@@ -38,9 +37,8 @@ const downloading=page.waitForEvent('download');await page.locator('#download').
 await page.evaluate(()=>globalThis.copyFail=true);await page.locator('#copy').click();await page.waitForFunction(()=>document.querySelector('#notice').textContent.startsWith('Copy failed.'));assert.equal(await page.locator('#copy').isDisabled(),false);await page.evaluate(()=>globalThis.copyFail=false);
 // Firefox native adapter receives the identical current PNG bytes.
 await page.evaluate(()=>{kakomiAPI.clipboard={setImageData:async data=>{globalThis.nativeCopy=Array.from(new Uint8Array(data))}}});await page.locator('#copy').click();await page.waitForFunction(()=>globalThis.nativeCopy);assert.deepEqual(await page.evaluate(()=>nativeCopy),await bytes());
-const uploaded=Buffer.from((await page.evaluate(()=>fixtureData)).split(',')[1],'base64');await page.locator('#wallpaper-file').setInputFiles({name:'wallpaper.png',mimeType:'image/png',buffer:uploaded});await ready();assert.equal(await page.locator('#upload-name').textContent(),'wallpaper.png');
 await page.locator('#reset').click();await ready();assert.deepEqual(await bytes(),original);
-await page.getByRole('tab',{name:'Image',exact:true}).click();await page.getByRole('button',{name:'Aurora',exact:true}).click();await slide('padding',25);await slide('radius',12);await slide('shadow',67);await page.screenshot({path:'tests/artifacts/editor-check.png',fullPage:true});
+await page.getByRole('tab',{name:'Gradient',exact:true}).click();await slide('padding',25);await slide('radius',12);await slide('shadow',67);await page.screenshot({path:'tests/artifacts/editor-check.png',fullPage:true});
 await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-assert.deepEqual(errors,[]);console.log('PASS: 24 wallpapers, tabs, solids, gradients, background blur, zoom blur, linked/unlinked zoom, percent padding, rounded alpha, serialized current-render copy, overlapping click guard, repeat copy, clipboard failure/retry, Firefox adapter, exact PNG download, upload, lossless reset, narrow layout.');
+assert.deepEqual(errors,[]);console.log('PASS: upload-only Image, no zoom controls, tabs, solids, gradients, background blur, percent padding, rounded alpha, serialized current-render copy, overlapping click guard, repeat copy, clipboard failure/retry, Firefox adapter, exact PNG download, upload, lossless reset, narrow layout.');
 }finally{await browser.close()}})().catch(e=>{console.error(e);process.exitCode=1});
