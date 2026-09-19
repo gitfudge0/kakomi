@@ -16,3 +16,7 @@ Chrome users extract the ZIP and choose Load unpacked in chrome://extensions wit
 Release downloads inherit repository visibility. A private repository requires sign-in and repository access.
 
 Workflow references: [GitHub release events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#release), [GitHub CLI release uploads](https://cli.github.com/manual/gh_release_upload).
+
+## Amend an existing release
+
+Only when intentionally replacing a published version, run Package release on the desired branch, enter the existing version tag, and enable **amend_release**. The manifest version must match that tag. After building and verifying all packages, the workflow moves the existing tag to the selected commit and replaces all five assets. The old and new tag SHAs are recorded in the run summary. Edit the release notes to match the replacement. Normal runs leave tags unchanged. Users of unpacked extensions must download the replacement and reload it; the version number is unchanged.

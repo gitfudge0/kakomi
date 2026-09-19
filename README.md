@@ -33,9 +33,9 @@ In Chrome, automatic copying on insecure HTTP pages may be blocked and fall back
 
 ## Style a screenshot
 
-Enable **Open preview page** in Settings. The preview's Appearance panel adds rounded corners, background padding, shadows, solid colors, editable gradients, and three original macOS-inspired wallpapers. Upload a local PNG, JPEG, or WebP to use your own background. Apple wallpaper files are not bundled.
+Enable **Open preview page** in Settings. The preview has compact Image / Color / Gradient tabs, 24 original wallpaper thumbnails, background blur, connected or independent screenshot/background zoom, zoom blur, rounded corners, padding, and shadows. Upload a local PNG, JPEG, or WebP to use your own background. Apple wallpaper files are not bundled.
 
-Preview, Copy image, and Download PNG use the same styled image. Padding and radius are measured in output pixels; the screenshot retains its original resolution. Reset restores the unmodified PNG. Edits and uploaded backgrounds last only for that open preview. Automatic copying at capture time still copies the original capture.
+Preview, Copy image, and Download PNG use the same styled image. Padding is a percentage of the original screenshot's shorter side; radius and blur use output pixels. At 100% screenshot zoom, the source retains its original resolution. Zoom above 100% enlarges the screenshot around the center and can crop at the canvas edges. Zoom blur affects the background only. Remove background makes the surrounding canvas transparent; it does not remove objects from the screenshot. Section resets restore Background, Zoom, or Frame independently. Reset all changes restores the unmodified PNG. Copy waits for the latest render and locks editing until the clipboard write completes. Edits and uploaded backgrounds last only for that open preview. Automatic copying at capture time still copies the original capture.
 
 ## Included
 

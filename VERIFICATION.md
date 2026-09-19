@@ -27,3 +27,7 @@ Before public release, load each package in its browser and verify activation, h
 ## Preview editor (1.3.0)
 
 Automated Chromium checks verify transparent rounded corners, exact padding dimensions, solid/gradient/wallpaper backgrounds, styled clipboard bytes, PNG download, local background upload, lossless reset, rapid control changes, and narrow layout. Computer-use testing checks the actual preview controls in Chrome using a local capture fixture. Privileged extension APIs remain simulated in these tests.
+
+### Amended 1.3.0
+
+Editor regressions now cover 24 wallpaper presets, tabs, background blur, radial zoom blur, connected and independent zoom, percent padding, exact PNG download bytes, local image upload, section/global reset, and narrow layouts. Delayed render/clipboard tests verify that Copy waits for the newest frame, prevents overlapping writes, exports the current image again after subsequent edits, releases controls on failure, and sends the same bytes through the Firefox native adapter. Chrome computer-use checks exercise the controls and successful browser clipboard writes on a local fixture. Actual extension activation and live Firefox remain outside the simulated harness.

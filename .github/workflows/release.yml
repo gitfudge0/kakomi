@@ -11,6 +11,11 @@ on:
         description: Existing version tag to package (for example v1.2.0)
         required: true
         type: string
+      amend_release:
+        description: Replace the existing tag and release downloads with this branch's commit
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -25,11 +30,12 @@ jobs:
     timeout-minutes: 10
     env:
       RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag || github.ref_name }}
+      AMEND_RELEASE: ${{ inputs.amend_release || false }}
     steps:
       - name: Check out release tag
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ github.event.release.tag_name || inputs.tag || github.ref_name }}
+          ref: ${{ inputs.amend_release && github.sha || github.event.release.tag_name || inputs.tag || github.ref_name }}
           persist-credentials: false
 
       - name: Validate version tag
@@ -44,7 +50,9 @@ jobs:
           with open(os.environ['GITHUB_ENV'], 'a') as out:
               out.write(f'VERSION={version}\n')
           PY
-          test "$(git rev-parse HEAD)" = "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
+          if [ "$AMEND_RELEASE" != "true" ]; then
+            test "$(git rev-parse HEAD)" = "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
+          fi
 
       - name: Build browser packages
         run: python3 build.py
@@ -79,6 +87,15 @@ jobs:
             "../kakomi-source-$VERSION.zip"
             "../kakomi-checksums.txt"
           )
+          if [ "$AMEND_RELEASE" = "true" ]; then
+            # Explicit manual mode only: keep an existing release's tag and all
+            # downloadable sources aligned with the newly tested package commit.
+            gh release view "$RELEASE_TAG" > /dev/null
+            previous=$(gh api "repos/$GH_REPO/git/ref/tags/$RELEASE_TAG" --jq '.object.sha')
+            current=$(git rev-parse HEAD)
+            gh api --method PATCH "repos/$GH_REPO/git/refs/tags/$RELEASE_TAG" -f sha="$current" -F force=true > /dev/null
+            printf 'Amended %s: %s -> %s\n' "$RELEASE_TAG" "$previous" "$current" >> "$GITHUB_STEP_SUMMARY"
+          fi
           if gh release view "$RELEASE_TAG" > /dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" "${assets[@]}" --clobber
           else
