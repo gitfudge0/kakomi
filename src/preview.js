@@ -5,7 +5,6 @@ async function init() {
   if (params.has('error')) {
     $('empty-title').textContent = 'This page is protected by your browser.';
     $('empty-message').textContent = 'Try a regular website. Browser settings, add-on stores, and built-in PDF viewers do not support the picker.';
-    $('subtitle').textContent = 'Open a website to start your capture.';
     return;
   }
   const id = params.get('id');
@@ -38,7 +37,7 @@ async function init() {
       } else {
         await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
       }
-      $('notice').textContent = 'Image copied. Paste it wherever you need it.';
+      $('notice').textContent = 'Copied to clipboard.';
     } catch { $('notice').textContent = 'Your browser could not copy the image. Use Download PNG instead.'; }
     finally { $('copy').disabled = false; }
   });

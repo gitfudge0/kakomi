@@ -1,17 +1,16 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Your capture · Kakomi</title><link rel="stylesheet" href="preview.css"><link rel="icon" href="icons/32.png"></head>
-<body>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Screenshot · Kakomi</title><link rel="stylesheet" href="preview.css"><link rel="icon" href="icons/32.png"></head>
+<body class="preview">
   <header><a class="brand" href="preview.html"><img class="mark" src="icons/48.png" width="33" height="33" alt=""> Kakomi</a><a class="local" href="settings.html">Settings</a></header>
   <main>
-    <div class="eyebrow">ONE ELEMENT. ONE SHOT.</div>
-    <div class="heading"><div><h1>Your little piece of the web.</h1><p id="subtitle">A precise capture, ready to go.</p></div><a id="download" class="primary" hidden>↓ &nbsp; Download PNG</a></div>
+    <div class="heading"><h1>Screenshot</h1><a id="download" class="primary" hidden>↓ &nbsp; Download PNG</a></div>
     <section class="workspace" aria-label="Screenshot preview">
       <div class="toolbar"><span><i class="dot"></i> <span id="element">CAPTURE</span></span><span id="dimensions">PNG · ORIGINAL RESOLUTION</span></div>
-      <div class="stage" id="stage"><img id="capture" alt="Captured page element" hidden><div id="empty"><span class="empty-icon">⌖</span><h2 id="empty-title">Point to something worth keeping.</h2><p id="empty-message">Open a web page, click the Kakomi extension,<br>and select an element to capture.</p></div></div>
-      <div class="caption"><span id="source">The web, one element at a time.</span><button id="copy" hidden>Copy image</button></div>
+      <div class="stage" id="stage"><img id="capture" alt="Screenshot" hidden><div id="empty"><h2 id="empty-title">No screenshot to display</h2><p id="empty-message">Open a web page, click Kakomi, then click an element<br>or drag an area to capture.</p></div></div>
+      <div class="caption"><span id="source"></span><button id="copy" hidden>Copy image</button></div>
     </section>
-    <div class="footnote"><span id="notice" role="status" aria-live="polite">No uploads. No account. Just your screenshot.</span><span>HOVER <b>→</b> SELECT <b>→</b> CAPTURE</span></div>
-    <details><summary>A few useful things to know</summary><p>Start the picker with the extension icon or <kbd>Alt + Shift + S</kbd>. Use <kbd>↑</kbd> to select a parent, <kbd>↓</kbd> to return to a child, and <kbd>Esc</kbd> to exit. Click or press Enter to capture an element, or drag a rectangle and release to capture an area. Choose clipboard and preview behavior in Settings.</p><p>Captures include the highlighted visible rectangle, including any overlapping page content. Offscreen content is excluded. Frames and closed shadow roots are selectable as whole elements. Browser settings, the Chrome Web Store, and other protected pages cannot be selected.</p><p>Previews are held temporarily in browser memory and may expire as new captures are made. Download anything you want to keep.</p></details>
+    <div class="footnote"><span id="notice" role="status" aria-live="polite"></span></div>
+    <details><summary>Capture help</summary><p>Start the picker with the extension icon or <kbd>Alt + Shift + S</kbd>. Use <kbd>↑</kbd> to select a parent, <kbd>↓</kbd> to return to a child, and <kbd>Esc</kbd> to exit. Click or press Enter to capture an element, or drag a rectangle and release to capture an area. Choose clipboard and preview behavior in Settings.</p><p>Captures include the highlighted visible rectangle, including any overlapping page content. Offscreen content is excluded. Frames and closed shadow roots are selectable as whole elements. Browser settings, the Chrome Web Store, and other protected pages cannot be selected.</p><p>Previews are held temporarily in browser memory and may expire as new captures are made. Download anything you want to keep.</p></details>
   </main><script src="api.js"></script><script src="preview.js"></script>
 </body></html>
