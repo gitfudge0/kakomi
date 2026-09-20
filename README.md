@@ -1,3 +1,7 @@
+
+
+https://github.com/user-attachments/assets/db0c8f5c-2b8b-45a4-9133-5ab40e12cf5b
+
 # Kakomi
 
 **Frame it. Keep it.** A local screenshot extension for Chrome and Firefox.
