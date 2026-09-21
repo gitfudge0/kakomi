@@ -14,15 +14,15 @@ If you cloned this repository, run `python build.py` first to generate the `chro
 
 ### Chrome 116+
 
-Extract `kakomi-chrome-1.3.0.zip`. Open `chrome://extensions`, turn on Developer mode, choose **Load unpacked**, and select the extracted folder containing `manifest.json`. Pin Kakomi in the extensions menu.
+Extract `kakomi-chrome-1.3.1.zip`. Open `chrome://extensions`, turn on Developer mode, choose **Load unpacked**, and select the extracted folder containing `manifest.json`. Pin Kakomi in the extensions menu.
 
 To upgrade the existing Element Shot installation while preserving preferences, replace the files in its current folder with the Chrome package contents, reload the extension, and refresh the page. If loading Kakomi as a separate extension, disable the old extension so both pickers do not run together.
 
 ### Firefox Desktop 140+
 
-For local testing, extract `kakomi-firefox-1.3.0.zip`. Open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and select its `manifest.json`. Temporary add-ons are removed when Firefox restarts.
+For local testing, extract `kakomi-firefox-1.3.1.zip`. Open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and select its `manifest.json`. Temporary add-ons are removed when Firefox restarts.
 
-The included `kakomi-firefox-1.3.0-unsigned.xpi` is an unsigned build, **not a permanently installable release**. Normal Firefox installation requires Mozilla signing. Submit the Firefox ZIP through the Mozilla Add-ons developer portal for listed or unlisted signing; distribute the signed XPI it returns. No signing keys or developer credentials are included.
+The included `kakomi-firefox-1.3.1-unsigned.xpi` is an unsigned build, **not a permanently installable release**. Normal Firefox installation requires Mozilla signing. Submit the Firefox ZIP through the Mozilla Add-ons developer portal for listed or unlisted signing; distribute the signed XPI it returns. No signing keys or developer credentials are included.
 
 ## Capture
 
@@ -31,7 +31,7 @@ The included `kakomi-firefox-1.3.0-unsigned.xpi` is an unsigned build, **not a p
 3. Click or press **Enter** to capture it. Or **drag a rectangle and release** for a custom area.
 4. The PNG copies to the clipboard by default; paste it where you need it. **Esc** cancels selection.
 
-Settings: right-click the toolbar icon → **Options** in Chrome; use the extension's **Preferences** in Firefox's add-on manager. Settings are also linked from the preview. Toggle **Copy to clipboard** and **Open preview page** independently. Both can be enabled; at least one must remain on. If copying fails, the preview opens with download and copy controls.
+Settings: right-click the toolbar icon → **Options** in Chrome; use the extension's **Preferences** in Firefox's add-on manager. Settings are also linked from the preview. **Open preview page** is the only destination toggle: off copies to the clipboard, while on opens the preview. If copying fails, the preview opens with download and copy controls.
 
 In Chrome, automatic copying on insecure HTTP pages may be blocked and fall back to the preview. Firefox uses its native image clipboard API. Captures are rectangular, limited to the visible viewport, and include overlapping page content. Offscreen elements are labeled “visible portion.” There is no scroll stitching. Iframes and closed shadow roots are captured as whole elements. Browser settings, add-on stores, built-in PDF viewers, and other restricted pages cannot be picked. Reset pinch zoom before capture; normal browser zoom is supported.
 
@@ -39,7 +39,7 @@ In Chrome, automatic copying on insecure HTTP pages may be blocked and fall back
 
 Enable **Open preview page** in Settings. The preview has compact Image / Color / Gradient tabs. Image uses only a locally uploaded PNG, JPEG, or WebP; there are no built-in wallpapers or zoom controls. Background blur, rounded corners, percentage-based padding, shadows, and transparent backgrounds are available.
 
-Preview, Copy image, and Download PNG use the same styled image. Padding is a percentage of the screenshot's shorter side; radius and blur use output pixels. The screenshot retains its original resolution. Remove background makes the surrounding canvas transparent; it does not remove objects from the screenshot. Background and Frame reset independently. Reset all changes restores the original PNG. Copy waits for the latest render and locks editing until the clipboard write completes. Edits and uploaded backgrounds last only for that open preview. Automatic copying at capture time still copies the original capture.
+Preview, Copy image, and Download PNG use the same styled image. Padding is a percentage of the screenshot's shorter side; radius and blur use output pixels. The screenshot retains its original resolution. Remove background makes the surrounding canvas transparent; it does not remove objects from the screenshot. Background and Frame reset independently. Reset all changes restores the original PNG. Copy waits for the latest render and locks editing until the clipboard write completes. Edits and uploaded backgrounds last only for that open preview. When **Open preview page** is off, automatic capture-time copying copies the original capture.
 
 ## Included
 

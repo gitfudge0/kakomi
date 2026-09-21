@@ -22,8 +22,10 @@ async function capture(message, sender) {
   if (capturing) throw new Error('A screenshot is already being prepared. Please try again.');
   capturing = true;
   try {
-    const settings = await kakomiAPI.storage.local.get({ copyClipboard: true, openPreview: false });
-    if (!settings.copyClipboard && !settings.openPreview) settings.copyClipboard = true;
+    const persisted = await kakomiAPI.storage.local.get({ copyClipboard: true, openPreview: false });
+    const settings = persisted.openPreview
+      ? { copyClipboard: false, openPreview: true }
+      : { copyClipboard: true, openPreview: false };
     await assertActive(sender.tab);
     const data = await kakomiAPI.tabs.captureVisibleTab(sender.tab.windowId, { format: 'png' });
     await assertActive(sender.tab);

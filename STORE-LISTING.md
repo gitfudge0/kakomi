@@ -30,6 +30,6 @@ Upload the matching browser ZIP, which has manifest.json at its root. The icon s
 
 Firefox's manifest declares no data collection/transmission (`required: ["none"]`). Its package uses a module background script and its native PNG clipboard API. Chrome uses a module service worker and writes from the active content script. Neither requests all-site host permissions.
 
-Existing settings and the YouTube zero-height body clipping fix are retained. The Firefox package is unsigned until processed by Mozilla; the Chrome package is unpacked until published through the Chrome Web Store. No name/trademark clearance is implied by this package.
+Kakomi 1.3.1 uses one Open preview page toggle: off copies to the clipboard, while on opens the preview. Legacy setting combinations normalize to one destination. The YouTube zero-height body clipping fix is retained. The Firefox package is unsigned until processed by Mozilla; the Chrome package is unpacked until published through the Chrome Web Store. No name/trademark clearance is implied by this package.
 
 References: [Mozilla signing](https://extensionworkshop.com/documentation/publish/signing-and-distribution-overview/), [Firefox background support](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background), [Firefox image clipboard](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/clipboard/setImageData).

@@ -1,4 +1,4 @@
-# Kakomi 1.2.0 verification
+# Kakomi 1.3.1 verification
 
 The browser regression suite passed in real Chrome DOM/rendering at 2x device scale, with privileged extension APIs simulated. It verifies:
 
@@ -9,8 +9,9 @@ The browser regression suite passed in real Chrome DOM/rendering at 2x device sc
 - Recovery after lost pointer capture or a missing pointer release
 - Overlay removal before screenshots and suppression of page clicks
 - PNG pixel dimensions and actual pixel colors after cropping
-- Clipboard-only default, preview-only, and both destinations
-- Settings persistence and preventing both destinations from being disabled
+- Mutually exclusive clipboard and preview destinations
+- Legacy destination normalization: both true opens the preview; both false copies to the clipboard
+- One-switch settings persistence and shortcut help
 - Failed-copy recovery preview, PNG download, and narrow layout
 - Firefox native clipboard adapter: PNG bytes, successful copy without a preview, and failure fallback
 
