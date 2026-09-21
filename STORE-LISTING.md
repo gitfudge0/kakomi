@@ -22,7 +22,7 @@ Kakomi lets you capture just the part of a webpage you want. Hover to see a prec
 
 Press Alt+Shift+S or click the toolbar icon to begin. Escape cancels.
 
-Captures cover the highlighted visible rectangle. Hidden and offscreen content is not stitched in. Protected browser pages and add-on stores are unsupported. Some sites restrict automatic clipboard access; Kakomi opens a preview if copying fails.
+Captures cover the highlighted visible rectangle. Hidden and offscreen content is not stitched in. Protected browser pages and add-on stores are unsupported. Some sites restrict automatic clipboard access; Kakomi reports the error on the page so you can retry, without opening a preview.
 
 ## Submission notes
 

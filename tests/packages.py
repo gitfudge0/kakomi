@@ -7,10 +7,12 @@ version = json.loads((root/'src/manifest.json').read_text(encoding='utf-8-sig'))
 for browser in ('chrome','firefox'):
     with zipfile.ZipFile(root.parent/f'kakomi-{browser}-{version}.zip') as archive:
         names=set(archive.namelist())
+        assert 'offscreen.html' not in names and 'offscreen.js' not in names
         config=json.loads(archive.read('manifest.json'))
         assert config['name']=='Kakomi'
         assert config['manifest_version']==3
-        assert set(config['permissions'])=={'activeTab','scripting','storage','clipboardWrite'}
+        expected_permissions={'activeTab','scripting','storage','clipboardWrite'}
+        assert set(config['permissions'])==expected_permissions
         assert not config.get('host_permissions')
         assert not config.get('content_scripts')
         for name in config['icons'].values():
@@ -19,10 +21,13 @@ for browser in ('chrome','firefox'):
         if browser=='chrome':
             assert config['background']=={'service_worker':'background.js','type':'module'}
             assert 'browser_specific_settings' not in config
+            assert config['web_accessible_resources']==[{'resources':['clipboard.html','clipboard.js'],'matches':['<all_urls>']}]
+            assert {'clipboard.html','clipboard.js'} <= names
         else:
             assert config['background']=={'scripts':['background.js'],'type':'module'}
             assert config['browser_specific_settings']['gecko']['data_collection_permissions']=={'required':['none']}
             assert 'minimum_chrome_version' not in config
+            assert 'web_accessible_resources' not in config
         for name in names:
             if name.endswith('.html'):
                 html=archive.read(name).decode('utf-8-sig')

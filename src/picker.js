@@ -1,6 +1,6 @@
 (() => {
   const key = '__elementShotPicker';
-  if (globalThis[key]) { globalThis[key].stop(); return; }
+  if (globalThis[key]) return;
   globalThis.__elementShotToast?.remove();
   // Remove any visual layer left behind by an extension reload.
   document.querySelectorAll('[data-element-shot]').forEach(el => el.remove());
@@ -78,6 +78,39 @@
   function stop() {
     stopped = true; abort.abort(); cancelAnimationFrame(frame); host.remove(); delete globalThis[key];
   }
+  function copyThroughFrame(id, token) {
+    if (typeof id !== 'string' || typeof token !== 'string') return Promise.reject(new Error('Clipboard capability is missing.'));
+    const clipboardHost = document.createElement('div');
+    clipboardHost.setAttribute('data-element-shot-clipboard', '');
+    clipboardHost.style.cssText = 'all:initial!important;position:fixed!important;left:0!important;top:0!important;width:1px!important;height:1px!important;opacity:0!important;z-index:2147483647!important;pointer-events:none!important;';
+    const clipboardRoot = clipboardHost.attachShadow({ mode: 'closed' });
+    const iframe = document.createElement('iframe');
+    iframe.src = kakomiAPI.runtime.getURL('clipboard.html') + '#' + new URLSearchParams({ id, token });
+    iframe.allow = 'clipboard-write'; iframe.tabIndex = -1;
+    iframe.style.cssText = 'width:1px;height:1px;border:0;display:block';
+    clipboardRoot.append(iframe);
+    let timer, onMessage;
+    const cleanup = () => { clearTimeout(timer); if (onMessage) removeEventListener('message', onMessage); clipboardHost.remove(); };
+    const result = new Promise((resolve, reject) => {
+      onMessage = event => {
+        const message = event.data;
+        if (event.source !== iframe.contentWindow || message?.type !== 'KAKOMI_CLIPBOARD_RESULT' || message.token !== token) return;
+        message.ok ? resolve() : reject(new Error(message.error || 'Clipboard write failed.'));
+      };
+      addEventListener('message', onMessage);
+      iframe.addEventListener('load', () => {
+        iframe.focus(); iframe.contentWindow.focus();
+        setTimeout(() => {
+          iframe.focus(); iframe.contentWindow.focus();
+          iframe.contentWindow.postMessage({ type: 'KAKOMI_CLIPBOARD_START', token }, '*');
+        }, 0);
+      }, { once: true });
+      iframe.addEventListener('error', () => reject(new Error('Clipboard helper could not load.')), { once: true });
+      timer = setTimeout(() => reject(new Error('Clipboard write timed out.')), 1200);
+      document.documentElement.append(clipboardHost);
+    });
+    return result.finally(cleanup);
+  }
   globalThis[key] = { stop };
   function listen(type, fn) {
     window.addEventListener(type, e => {
@@ -153,7 +186,6 @@
     host.style.setProperty('visibility', 'hidden', 'important');
     try {
       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-      await new Promise(resolve => setTimeout(resolve, 80));
       const latest = customRect ? initial : bounds(target);
       if ((!customRect && !target.isConnected) || scrollX !== scroll.x || scrollY !== scroll.y || innerWidth !== viewport.width || innerHeight !== viewport.height ||
         ['x', 'y', 'width', 'height'].some(k => Math.abs(initial.rect[k] - latest.rect[k]) > 1)) throw new Error('The element moved. Hover and try again.');
@@ -162,12 +194,8 @@
       if (!response?.ok) throw new Error(response?.error || 'Capture failed. Please try again.');
       let copied = response.copied === true;
       if (response.copyClipboard) {
-        try {
-          const bytes = Uint8Array.from(atob(response.data.split(',')[1]), char => char.charCodeAt(0));
-          const blob = new Blob([bytes], { type: 'image/png' });
-          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-          copied = true;
-        } catch { /* The worker opens a recovery preview if copying is blocked. */ }
+        try { await copyThroughFrame(response.id, response.clipboardToken); copied = true; }
+        catch { /* The worker reports the copy failure after finishing. */ }
       }
       const finished = await kakomiAPI.runtime.sendMessage({ type: 'ELEMENT_SHOT_FINISH', id: response.id, copied });
       if (!finished?.ok) throw new Error(finished?.error || 'Could not complete the capture. Try again.');

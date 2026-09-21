@@ -1,8 +1,8 @@
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search);
 let objectURL,sourceImage,originalBlob,exportBlob,customImage;
 let revision=0,renderedRevision=-1,fileRevision=0,timer,pending,copying=false,uploading=false,baseNotice='';
-let selectedTab='image',customName='';
-const defaults={'solid-color':'#d5e9df','gradient-start':'#ffba93','gradient-end':'#8e73d9',angle:'135',blur:'0',padding:'0',radius:'0',shadow:'0'};
+let selectedTab='gradient',customName='';
+const defaults={'solid-color':'#d5e9df','gradient-start':'#ffba93','gradient-end':'#8e73d9',angle:'135',blur:'0',padding:'20',radius:'0',shadow:'0'};
 const resetGroups={background:['solid-color','gradient-start','gradient-end','angle','blur'],frame:['padding','radius','shadow']};
 function options(){return{background:$('remove-background').checked?'none':selectedTab==='image'?(customImage?'custom':'none'):selectedTab==='color'?'solid':'gradient',color:$('solid-color').value,colors:[$('gradient-start').value,$('gradient-end').value],angle:+$('angle').value,padding:+$('padding').value,radius:+$('radius').value,shadow:+$('shadow').value,blur:+$('blur').value}}
 function updateControls(){
@@ -41,17 +41,17 @@ function buildPresets(){
 }
 function reset(group){
  for(const id of group?resetGroups[group]:Object.keys(defaults))$(id).value=defaults[id];
- if(!group||group==='background'){selectedTab='image';customName='';fileRevision++;uploading=false;customImage?.close();customImage=null;$('wallpaper-file').value='';$('remove-background').checked=true}
+ if(!group||group==='background'){selectedTab='gradient';customName='';fileRevision++;uploading=false;customImage?.close();customImage=null;$('wallpaper-file').value='';$('remove-background').checked=false}
  scheduleRender();
 }
 async function copyImage(){
  if(copying||uploading)return;
  copying=true;$('edit-controls').disabled=true;$('copy').disabled=true;$('copy').textContent='Copying…';$('notice').textContent='Preparing clipboard…';
  try{
-  // Pass the fresh render as a promise to preserve the click's user activation.
-  // Serialize writes and freeze edits until the OS clipboard confirms completion.
-  const latest=flushRender();latest.catch(()=>{});
-  if(kakomiAPI.clipboard?.setImageData){const b=await latest;await kakomiAPI.clipboard.setImageData(await b.arrayBuffer(),'png')}
+  // Promise providers preserve user activation while a fresh render is pending.
+  // Completed renders use a concrete Blob for browsers that reject promise providers.
+  const renderPending=renderedRevision!==revision,latest=renderPending?flushRender():exportBlob;if(renderPending)latest.catch(()=>{});
+  if(kakomiAPI.runtime.getURL('').startsWith('moz-extension:')&&kakomiAPI.clipboard?.setImageData){const b=await latest;await kakomiAPI.clipboard.setImageData(await b.arrayBuffer(),'png')}
   else{const item=new ClipboardItem({'image/png':latest});await navigator.clipboard.write([item])}
   $('notice').textContent='Copied current screenshot.';
  }catch(e){$('notice').textContent='Copy failed. '+(e.message||'Use Download PNG instead.')}

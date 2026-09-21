@@ -69,7 +69,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
-          Kakomi 1.3.1 fixes screenshot destination settings. Options now has one Open preview page switch: off copies to the clipboard, while on opens the preview. Legacy conflicting values are normalized, and failed clipboard copies still fall back to the preview.
+          Kakomi 1.3.1 fixes screenshot destination settings. Options now has one Open preview page switch: off copies to the clipboard and never opens a preview, while on opens the preview. Legacy conflicting values are normalized. If clipboard copying fails while preview is off, Kakomi reports the error on the page so the user can retry.
 
           Capture a highlighted webpage element with a click, or drag to capture an area.
 

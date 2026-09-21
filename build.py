@@ -18,6 +18,8 @@ artifacts = []
 for browser in ('chrome', 'firefox'):
     target = ROOT / browser
     target.mkdir(exist_ok=True)
+    for obsolete in ('offscreen.html', 'offscreen.js'):
+        (target / obsolete).unlink(missing_ok=True)
     for path in SRC.rglob('*'):
         if path.is_file():
             dest = target / path.relative_to(SRC)
@@ -26,6 +28,7 @@ for browser in ('chrome', 'firefox'):
     config = json.loads(json.dumps(manifest))
     if browser == 'firefox':
         config.pop('minimum_chrome_version', None)
+        config.pop('web_accessible_resources', None)
         config['background'] = {'scripts': ['background.js'], 'type': 'module'}
         config['browser_specific_settings'] = {'gecko': {
             'id': 'kakomi@extensions.local',
@@ -35,6 +38,8 @@ for browser in ('chrome', 'firefox'):
     (target / 'manifest.json').write_text(json.dumps(config, indent=2) + '\n', encoding='utf-8')
     # Ensure every package entry point and icon exists before writing a ZIP.
     needed = ['api.js', 'geometry.js', 'picker.js', config['options_ui']['page']]
+    if browser == 'chrome':
+        needed += ['clipboard.html', 'clipboard.js']
     needed += list(config['icons'].values())
     needed += [config['background'].get('service_worker', 'background.js')]
     for name in needed:
